@@ -16,12 +16,15 @@ public class Vista extends VBox {
     HBox hboxR = new HBox();
     HBox hboxG = new HBox();
     HBox hboxB = new HBox();
+
     Label labelR = new Label();
     Label labelG = new Label();
     Label labelB = new Label();
+
     Label labelValueR = new Label();
     Label labelValueG = new Label();
     Label labelValueB = new Label();
+
     Slider sliderR = new Slider(0, 255, 0);
     Slider sliderG = new Slider(0, 255, 0);
     Slider sliderB = new Slider(0, 255, 0);
@@ -31,9 +34,6 @@ public class Vista extends VBox {
     NumberBinding valorB;
 
 
-    //ObservableList<NumberBinding> valores = FXCollections.observableArrayList();
-    // ListProperty<NumberBinding> valores;
-
     public Vista() {
         inciarElementos();
     }
@@ -41,9 +41,17 @@ public class Vista extends VBox {
     public void inciarElementos() {
         pantalla.setPrefSize(400, 100);
 
-        valorR = (NumberBinding) sliderR.valueProperty();
-        valorG = (NumberBinding) sliderG.valueProperty();
-        valorB = (NumberBinding) sliderB.valueProperty();
+        sliderR.setShowTickMarks(true);
+        sliderG.setShowTickMarks(true);
+        sliderB.setShowTickMarks(true);
+
+        valorR = sliderR.valueProperty().divide(255);
+        valorG = sliderG.valueProperty().divide(255);
+        valorB = sliderB.valueProperty().divide(255);
+
+        labelValueR.textProperty().bind(valorR.asString());
+        labelValueG.textProperty().bind(valorG.asString());
+        labelValueB.textProperty().bind(valorB.asString());
 
         hboxR.getChildren().add(labelR);
         hboxR.getChildren().add(sliderR);
@@ -66,16 +74,34 @@ public class Vista extends VBox {
         labelG.setText("Green: ");
         labelB.setText("Blue: ");
 
-        labelValueG.setText(valorR.toString());
-        labelValueG.setText(valorG.toString());
-        labelValueG.setText(valorB.toString());
+        // pantalla.setBackground(new Background(new BackgroundFill(Color.color(valorR.intValue(), valorG.intValue(), valorB.intValue()), null, null));
 
+        //pantalla.eightProperty()
+      //  pantalla.widthProperty()
 
-        sliderR.setShowTickMarks(true);
-        sliderG.setShowTickMarks(true);
-        sliderB.setShowTickMarks(true);
+        valorR.addListener(e -> {
+            BackgroundFill fill = new BackgroundFill(
+                    Color.color(valorR.doubleValue(), valorG.doubleValue(), valorB.doubleValue()),
+                    null,
+                    null);
+            pantalla.setBackground(new Background(fill));
+        });
 
-       // pantalla.setBackground(new Background(new BackgroundFill(Color.color(valorR.doubleValue(), valorG.doubleValue(), valorB.doubleValue()));
+        valorG.addListener(e -> {
+            BackgroundFill fill = new BackgroundFill(
+                    Color.color(valorR.doubleValue(), valorG.doubleValue(), valorB.doubleValue()),
+                    null,
+                    null);
+            pantalla.setBackground(new Background(fill));
+        });
+
+        valorB.addListener(e -> {
+            BackgroundFill fill = new BackgroundFill(
+                    Color.color(valorR.doubleValue(), valorG.doubleValue(), valorB.doubleValue()),
+                    null,
+                    null);
+            pantalla.setBackground(new Background(fill));
+        });
 
         // valores.add(valorR);
         // valores.add(valorG);
